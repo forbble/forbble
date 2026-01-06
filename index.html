@@ -28,35 +28,31 @@
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 300;
             line-height: 1.6;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
 
         /* === DISABLE INTERACTIONS === */
         body {
             -webkit-text-size-adjust: 100%;
-            touch-action: pan-y pinch-zoom;
+            touch-action: pan-y;
+            overflow: hidden;
         }
 
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
+        /* === FIXED CONTAINER (No Bounce) === */
+        .app-container {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            background: #0a0a0a;
         }
 
         /* === CUSTOM SCROLLBAR === */
-        .app-container {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-
         .app-container::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         .app-container::-webkit-scrollbar-track {
@@ -64,40 +60,11 @@
         }
 
         .app-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
         }
 
-        .app-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* === MOBILE VIEWPORT === */
-        .app-container {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            background: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
-        }
-
-        /* === GLASS EFFECT UTILITIES === */
-        .glass {
-            background: rgba(26, 26, 26, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        .glass-card {
-            background: rgba(30, 30, 30, 0.4);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 0.5px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* === HEADER (Mobile App Style) === */
+        /* === HEADER === */
         .app-header {
             position: sticky;
             top: 0;
@@ -108,6 +75,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 20px;
+            background: #0a0a0a;
             border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -116,7 +84,6 @@
             font-weight: 300;
             letter-spacing: -0.5px;
             color: rgba(255, 255, 255, 0.98);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         /* === CONTENT SECTIONS === */
@@ -127,7 +94,6 @@
             justify-content: center;
             align-items: center;
             padding: 40px 24px;
-            position: relative;
         }
 
         .section-content {
@@ -136,7 +102,7 @@
             text-align: center;
         }
 
-        /* === TYPOGRAPHY STYLES === */
+        /* === TYPOGRAPHY === */
         .hero-large {
             font-size: 48px;
             font-weight: 300;
@@ -150,15 +116,6 @@
             font-size: 18px;
             font-weight: 300;
             color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 40px;
-        }
-
-        .section-label {
-            font-size: 14px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
             margin-bottom: 40px;
         }
 
@@ -178,28 +135,18 @@
         }
 
         .status-text {
-            font-size: 22px;
+            font-size: 14px;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 80px;
+            letter-spacing: 1px;
         }
 
         /* === DIVIDERS === */
-        .section-divider {
-            width: 100%;
-            height: 0.5px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.1) 20%, 
-                rgba(255, 255, 255, 0.1) 80%, 
-                transparent 100%);
-            margin: 40px 0;
-        }
-
         .subtle-divider {
             width: 40px;
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             margin: 32px auto;
         }
 
@@ -208,42 +155,14 @@
             width: 100%;
             padding: 60px 24px 40px;
             text-align: center;
-            border-top: 0.5px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .footer-content {
-            max-width: 320px;
-            margin: 0 auto;
-        }
-
-        .footer-section {
-            margin-bottom: 32px;
-        }
-
-        .footer-title {
-            font-size: 14px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .footer-text {
-            font-size: 16px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
+            background: #0a0a0a;
         }
 
         .copyright {
             font-size: 14px;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.3);
             letter-spacing: 0.5px;
-            margin-top: 40px;
-            padding-top: 24px;
-            border-top: 0.5px solid rgba(255, 255, 255, 0.05);
         }
 
         /* === MOBILE OPTIMIZATIONS === */
@@ -262,10 +181,6 @@
             
             .highlight-description {
                 font-size: 16px;
-            }
-            
-            .status-text {
-                font-size: 20px;
             }
         }
 
@@ -287,7 +202,7 @@
             }
         }
 
-        /* === SAFE AREA INSETS (Notch Support) === */
+        /* === SAFE AREA INSETS === */
         @supports (padding: max(0px)) {
             .section {
                 padding-left: max(24px, env(safe-area-inset-left));
@@ -300,13 +215,9 @@
                 padding-top: env(safe-area-inset-top);
                 height: calc(60px + env(safe-area-inset-top));
             }
-            
-            .app-footer {
-                padding-bottom: max(40px, env(safe-area-inset-bottom));
-            }
         }
 
-        /* === SCROLL SNAP (Mobile App Feel) === */
+        /* === SCROLL SNAP === */
         @media (min-height: 600px) {
             .app-container {
                 scroll-snap-type: y mandatory;
@@ -322,72 +233,46 @@
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
     <div class="app-container">
         
-        <!-- APP HEADER (Sticky) -->
-        <header class="app-header glass">
+        <!-- HEADER -->
+        <header class="app-header">
             <h1 class="app-title">FORBBLE</h1>
         </header>
         
         <!-- SECTION 1: HERO -->
         <section class="section">
             <div class="section-content">
-                <div class="section-label">Coming</div>
+                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.5); letter-spacing: 2px; margin-bottom: 40px;">
+                    COMING SOON
+                </div>
                 <h2 class="hero-large">A new mobile experience</h2>
                 <div class="subtle-divider"></div>
                 <p class="hero-subtitle">Designed for connection</p>
             </div>
         </section>
         
-        <div class="section-divider"></div>
-        
         <!-- SECTION 2: HIGHLIGHT -->
         <section class="section">
             <div class="section-content">
                 <h3 class="highlight-title">A new way to connect</h3>
                 <div class="subtle-divider"></div>
-                <p class="highlight-description glass-card" style="padding: 24px; border-radius: 16px;">
+                <p class="highlight-description">
                     We're building something different. A platform where interaction replaces observation, and creativity meets connection.
                 </p>
-            </div>
-        </section>
-        
-        <div class="section-divider"></div>
-        
-        <!-- SECTION 3: STATUS -->
-        <section class="section">
-            <div class="section-content">
-                <div class="section-label">Status</div>
-                <p class="status-text glass-card" style="padding: 20px; border-radius: 12px;">
+                
+                <!-- MINIMAL STATUS -->
+                <div class="status-text">
                     In active development
-                </p>
+                </div>
             </div>
         </section>
         
         <!-- FOOTER -->
         <footer class="app-footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-title">Contact</div>
-                    <p class="footer-text">hello@forbble.com</p>
-                </div>
-                
-                <div class="footer-section">
-                    <div class="footer-title">Location</div>
-                    <p class="footer-text">Global development team</p>
-                </div>
-                
-                <div class="footer-section">
-                    <div class="footer-title">Platform</div>
-                    <p class="footer-text">Mobile app coming soon</p>
-                </div>
-                
-                <div class="copyright">
-                    © 2026 Forbble. All rights reserved.
-                </div>
+            <div class="copyright">
+                © 2026 Forbble
             </div>
         </footer>
         
     </div>
-    
-    <!-- NO JAVASCRIPT - PURE CSS -->
 </body>
 </html>
