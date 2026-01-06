@@ -8,26 +8,39 @@
     <title>Forbble</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        /* === RESET & GLOBAL === */
+        /* === RESET & DISABLE ALL INTERACTIONS === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+            -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            outline: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --glass-bg: rgba(26, 26, 26, 0.7);
+            --text-primary: rgba(255, 255, 255, 0.98);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --border-subtle: rgba(255, 255, 255, 0.05);
         }
 
         html, body {
             width: 100%;
             height: 100%;
-            overflow-x: hidden;
-            background: #0a0a0a;
-            color: rgba(255, 255, 255, 0.95);
+            overflow: hidden;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 300;
             line-height: 1.6;
@@ -38,60 +51,50 @@
             bottom: 0;
         }
 
-        /* === DISABLE ALL INTERACTIONS === */
+        /* === DISABLE ALL BROWSER BEHAVIORS === */
         body {
             -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            overscroll-behavior: none;
             touch-action: pan-y;
-            overflow: hidden;
-        }
-
-        /* === BLOCK INSPECTOR/SHORTCUTS === */
-        body * {
-            pointer-events: all !important;
         }
 
         /* === CUSTOM SCROLLBAR === */
-        .app-container {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-
-        .app-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .app-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .app-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-
-        .app-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* === MOBILE VIEWPORT === */
-        .app-container {
+        .scroll-container {
             width: 100%;
             height: 100%;
-            position: fixed;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
-            background: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
         }
 
-        /* === GLASS EFFECT UTILITIES === */
-        .glass {
-            background: rgba(26, 26, 26, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        .scroll-container::-webkit-scrollbar {
+            width: 4px;
         }
 
-        /* === HEADER (Mobile App Style) === */
+        .scroll-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* === APP STRUCTURE === */
+        .app-wrapper {
+            width: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === HEADER (Forbble left-aligned) === */
         .app-header {
             position: sticky;
             top: 0;
@@ -100,20 +103,21 @@
             height: 60px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+            padding: 0 24px;
+            background: var(--bg-primary);
+            border-bottom: 0.5px solid var(--border-subtle);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .app-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 300;
             letter-spacing: -0.5px;
-            color: rgba(255, 255, 255, 0.98);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
         }
 
-        /* === CONTENT SECTIONS === */
+        /* === SECTIONS === */
         .section {
             min-height: 100vh;
             display: flex;
@@ -130,101 +134,83 @@
             text-align: center;
         }
 
-        /* === TYPOGRAPHY STYLES === */
+        /* === TYPOGRAPHY === */
         .hero-large {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: 300;
             line-height: 1.1;
-            margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.98);
-            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            letter-spacing: -2px;
         }
 
         .hero-subtitle {
             font-size: 18px;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 40px;
+            color: var(--text-secondary);
         }
 
-        .section-label {
-            font-size: 14px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-        }
-
-        /* === DIVIDERS === */
-        .section-divider {
-            width: 100%;
-            height: 0.5px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.1) 20%, 
-                rgba(255, 255, 255, 0.1) 80%, 
-                transparent 100%);
-            margin: 40px 0;
-        }
-
-        .subtle-divider {
-            width: 40px;
+        .divider {
+            width: 60px;
             height: 1px;
             background: rgba(255, 255, 255, 0.15);
-            margin: 32px auto;
+            margin: 30px auto;
         }
 
-        /* === MINIMAL STATUS === */
-        .minimal-status {
-            font-size: 14px;
+        .status-text {
+            font-size: 16px;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 80px;
-            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 24px;
         }
 
         /* === FOOTER === */
         .app-footer {
             width: 100%;
-            padding: 60px 24px 40px;
+            padding: 40px 24px;
             text-align: center;
-            border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+            border-top: 0.5px solid var(--border-subtle);
+            background: var(--bg-primary);
         }
 
-        .copyright {
+        .footer-text {
             font-size: 14px;
             font-weight: 300;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.4);
             letter-spacing: 0.5px;
+            line-height: 1.4;
         }
 
-        /* === MOBILE OPTIMIZATIONS === */
+        /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .section {
                 padding: 32px 20px;
             }
             
             .hero-large {
-                font-size: 42px;
+                font-size: 44px;
             }
             
             .hero-subtitle {
                 font-size: 16px;
+            }
+            
+            .app-header {
+                padding: 0 20px;
             }
         }
 
         @media (max-width: 360px) {
             .hero-large {
-                font-size: 36px;
+                font-size: 38px;
             }
             
-            .hero-subtitle {
-                font-size: 16px;
+            .app-title {
+                font-size: 22px;
             }
         }
 
-        /* === SAFE AREA INSETS (Notch Support) === */
+        /* === SAFE AREA SUPPORT === */
         @supports (padding: max(0px)) {
             .section {
                 padding-left: max(24px, env(safe-area-inset-left));
@@ -236,6 +222,7 @@
             .app-header {
                 padding-top: env(safe-area-inset-top);
                 height: calc(60px + env(safe-area-inset-top));
+                padding-left: max(24px, env(safe-area-inset-left));
             }
             
             .app-footer {
@@ -243,42 +230,77 @@
             }
         }
 
-        /* === SCROLL SNAP (Mobile App Feel) === */
+        /* === SCROLL SNAP === */
         @media (min-height: 600px) {
-            .app-container {
-                scroll-snap-type: y mandatory;
-            }
-            
             .section {
                 scroll-snap-align: start;
                 scroll-snap-stop: always;
             }
+            
+            .scroll-container {
+                scroll-snap-type: y mandatory;
+            }
+        }
+
+        /* === PREVENT CONTEXT MENU === */
+        .no-context {
+            -webkit-context-menu: none;
+            context-menu: none;
         }
     </style>
 </head>
-<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" onkeydown="return false" onkeypress="return false" onkeyup="return false">
-    
-    <!-- BLOCK ALL KEYBOARD SHORTCUTS -->
+<body class="no-context" oncontextmenu="return false" ondragstart="return false" onselectstart="return false" onkeydown="return false">
+    <div class="scroll-container">
+        <div class="app-wrapper">
+            
+            <!-- HEADER (Forbble left-aligned) -->
+            <header class="app-header">
+                <h1 class="app-title">FORBBLE</h1>
+            </header>
+            
+            <!-- MAIN SECTION -->
+            <section class="section">
+                <div class="section-content">
+                    <h2 class="hero-large">Coming Soon</h2>
+                    <div class="divider"></div>
+                    <p class="hero-subtitle">A new mobile experience</p>
+                    <p class="status-text">In active development</p>
+                </div>
+            </section>
+            
+            <!-- FOOTER -->
+            <footer class="app-footer">
+                <p class="footer-text">© 2026 Forbble</p>
+                <p class="footer-text" style="margin-top: 8px; font-size: 12px;">
+                    All rights reserved
+                </p>
+            </footer>
+            
+        </div>
+    </div>
+
+    <!-- BLOCK KEYBOARD SHORTCUTS -->
     <script>
         // Block all keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Block Ctrl, Alt, Shift, F12, etc.
-            if (e.ctrlKey || e.altKey || e.metaKey || e.key === 'F12') {
+            // Block Ctrl/Command + any key
+            if (e.ctrlKey || e.metaKey) {
                 e.preventDefault();
-                e.stopPropagation();
                 return false;
             }
             
-            // Block specific shortcut keys
-            const blockedKeys = ['I', 'J', 'C', 'U', 'S', 'F12', 'F5'];
-            if (blockedKeys.includes(e.key.toUpperCase())) {
+            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
+                (e.ctrlKey && e.keyCode === 85)) {
                 e.preventDefault();
-                e.stopPropagation();
                 return false;
             }
+            
+            return false;
         });
 
-        // Block right-click menu
+        // Block right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
@@ -290,99 +312,26 @@
             return false;
         });
 
-        // Block dragging
+        // Block drag and drop
         document.addEventListener('dragstart', function(e) {
             e.preventDefault();
             return false;
         });
 
-        // Block F12 even if they bypass
-        document.addEventListener('keyup', function(e) {
-            if (e.key === 'F12') {
+        // Prevent overscroll bounce
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.classList.contains('scroll-container')) return;
+            e.preventDefault();
+        }, { passive: false });
+
+        // Block all keyboard input except scroll keys
+        document.addEventListener('keydown', function(e) {
+            const allowedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40]; // Space, Page Up/Down, Home, End, Arrows
+            if (!allowedKeys.includes(e.keyCode)) {
                 e.preventDefault();
                 return false;
             }
         });
     </script>
-
-    <div class="app-container">
-        
-        <!-- APP HEADER (Sticky) -->
-        <header class="app-header glass">
-            <h1 class="app-title">FORBBLE</h1>
-        </header>
-        
-        <!-- SECTION 1: HERO -->
-        <section class="section">
-            <div class="section-content">
-                <div class="section-label">Coming</div>
-                <h2 class="hero-large">A new mobile experience</h2>
-                <div class="subtle-divider"></div>
-                <p class="hero-subtitle">Designed for connection</p>
-                
-                <!-- MINIMAL STATUS -->
-                <div class="minimal-status">
-                    In active development
-                </div>
-            </div>
-        </section>
-        
-        <!-- FOOTER -->
-        <footer class="app-footer">
-            <div class="copyright">
-                © 2026 Forbble
-            </div>
-        </footer>
-        
-    </div>
-
-    <!-- ADDITIONAL PROTECTION LAYER -->
-    <script>
-        // Block developer tools opening
-        (function() {
-            var devtools = {
-                open: false,
-                orientation: null
-            };
-            
-            var threshold = 160;
-            
-            var emitEvent = function(state) {
-                window.dispatchEvent(new CustomEvent('devtoolschange', {
-                    detail: { open: state }
-                }));
-            };
-            
-            setInterval(function() {
-                var widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                var heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                var orientation = widthThreshold ? 'vertical' : 'horizontal';
-                
-                if (!(heightThreshold && widthThreshold) &&
-                    ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
-                    widthThreshold || heightThreshold)) {
-                    
-                    if (!devtools.open || devtools.orientation !== orientation) {
-                        emitEvent(true);
-                        devtools.open = true;
-                        devtools.orientation = orientation;
-                        
-                        // If devtools detected, try to block
-                        document.body.innerHTML = '';
-                        document.write('Access restricted');
-                        document.close();
-                        window.stop();
-                    }
-                } else {
-                    if (devtools.open) {
-                        emitEvent(false);
-                        devtools.open = false;
-                        devtools.orientation = null;
-                    }
-                }
-            }, 500);
-        })();
-    </script>
-    
 </body>
 </html>
