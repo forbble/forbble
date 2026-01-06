@@ -16,7 +16,10 @@
             -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
             -webkit-touch-callout: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
             user-select: none;
+            outline: none;
         }
 
         html, body {
@@ -35,18 +38,16 @@
             bottom: 0;
         }
 
-        /* === DISABLE INTERACTIONS === */
+        /* === DISABLE ALL INTERACTIONS === */
         body {
             -webkit-text-size-adjust: 100%;
-            touch-action: pan-y pinch-zoom;
+            touch-action: pan-y;
+            overflow: hidden;
         }
 
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
+        /* === BLOCK INSPECTOR/SHORTCUTS === */
+        body * {
+            pointer-events: all !important;
         }
 
         /* === CUSTOM SCROLLBAR === */
@@ -88,13 +89,6 @@
             background: rgba(26, 26, 26, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-        }
-
-        .glass-card {
-            background: rgba(30, 30, 30, 0.4);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 0.5px solid rgba(255, 255, 255, 0.08);
         }
 
         /* === HEADER (Mobile App Style) === */
@@ -162,21 +156,6 @@
             margin-bottom: 40px;
         }
 
-        .highlight-title {
-            font-size: 32px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 24px;
-            line-height: 1.2;
-        }
-
-        .highlight-description {
-            font-size: 18px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-        }
-
         /* === DIVIDERS === */
         .section-divider {
             width: 100%;
@@ -196,6 +175,15 @@
             margin: 32px auto;
         }
 
+        /* === MINIMAL STATUS === */
+        .minimal-status {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 80px;
+            letter-spacing: 1px;
+        }
+
         /* === FOOTER === */
         .app-footer {
             width: 100%;
@@ -211,15 +199,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* === MINIMAL STATUS === */
-        .minimal-status {
-            font-size: 14px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 80px;
-            letter-spacing: 1px;
-        }
-
         /* === MOBILE OPTIMIZATIONS === */
         @media (max-width: 768px) {
             .section {
@@ -230,11 +209,7 @@
                 font-size: 42px;
             }
             
-            .highlight-title {
-                font-size: 28px;
-            }
-            
-            .highlight-description {
+            .hero-subtitle {
                 font-size: 16px;
             }
         }
@@ -246,14 +221,6 @@
             
             .hero-subtitle {
                 font-size: 16px;
-            }
-            
-            .highlight-title {
-                font-size: 24px;
-            }
-            
-            .highlight-description {
-                font-size: 15px;
             }
         }
 
@@ -289,7 +256,55 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false" onkeydown="return false" onkeypress="return false" onkeyup="return false">
+    
+    <!-- BLOCK ALL KEYBOARD SHORTCUTS -->
+    <script>
+        // Block all keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Block Ctrl, Alt, Shift, F12, etc.
+            if (e.ctrlKey || e.altKey || e.metaKey || e.key === 'F12') {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            
+            // Block specific shortcut keys
+            const blockedKeys = ['I', 'J', 'C', 'U', 'S', 'F12', 'F5'];
+            if (blockedKeys.includes(e.key.toUpperCase())) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        });
+
+        // Block right-click menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Block text selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Block dragging
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Block F12 even if they bypass
+        document.addEventListener('keyup', function(e) {
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
     <div class="app-container">
         
         <!-- APP HEADER (Sticky) -->
@@ -304,19 +319,6 @@
                 <h2 class="hero-large">A new mobile experience</h2>
                 <div class="subtle-divider"></div>
                 <p class="hero-subtitle">Designed for connection</p>
-            </div>
-        </section>
-        
-        <div class="section-divider"></div>
-        
-        <!-- SECTION 2: HIGHLIGHT -->
-        <section class="section">
-            <div class="section-content">
-                <h3 class="highlight-title">A new way to connect</h3>
-                <div class="subtle-divider"></div>
-                <p class="highlight-description">
-                    We're building something different. A platform where interaction replaces observation, and creativity meets connection.
-                </p>
                 
                 <!-- MINIMAL STATUS -->
                 <div class="minimal-status">
@@ -333,7 +335,54 @@
         </footer>
         
     </div>
+
+    <!-- ADDITIONAL PROTECTION LAYER -->
+    <script>
+        // Block developer tools opening
+        (function() {
+            var devtools = {
+                open: false,
+                orientation: null
+            };
+            
+            var threshold = 160;
+            
+            var emitEvent = function(state) {
+                window.dispatchEvent(new CustomEvent('devtoolschange', {
+                    detail: { open: state }
+                }));
+            };
+            
+            setInterval(function() {
+                var widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                var heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                var orientation = widthThreshold ? 'vertical' : 'horizontal';
+                
+                if (!(heightThreshold && widthThreshold) &&
+                    ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) ||
+                    widthThreshold || heightThreshold)) {
+                    
+                    if (!devtools.open || devtools.orientation !== orientation) {
+                        emitEvent(true);
+                        devtools.open = true;
+                        devtools.orientation = orientation;
+                        
+                        // If devtools detected, try to block
+                        document.body.innerHTML = '';
+                        document.write('Access restricted');
+                        document.close();
+                        window.stop();
+                    }
+                } else {
+                    if (devtools.open) {
+                        emitEvent(false);
+                        devtools.open = false;
+                        devtools.orientation = null;
+                    }
+                }
+            }, 500);
+        })();
+    </script>
     
-    <!-- NO JAVASCRIPT - PURE CSS -->
 </body>
 </html>
