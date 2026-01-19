@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Change Result - Forbble</title>
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1E1E1E;
+            --bg-card: #242424;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0A0;
+            --text-hint: #6D6D6D;
+            --accent: #FFFFFF;
+            --accent-text: #121212;
+            --success: #4CAF50;
+            --error: #F44336;
+            --warning: #FF9800;
+            --info: #2196F3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #2D2D2D;
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 24px;
+        }
+
+        .status-success .icon { color: var(--success); }
+        .status-already_verified .icon { color: var(--info); }
+        .status-expired .icon { color: var(--warning); }
+        .status-invalid .icon,
+        .status-error .icon { color: var(--error); }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .details {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+            border: 1px solid #2D2D2D;
+        }
+
+        .detail-item {
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            color: var(--text-hint);
+            font-size: 13px;
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-size: 14px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+
+        .actions {
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--accent-text);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .button-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid #2D2D2D;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Success State -->
+        <div id="success" class="hidden">
+            <div class="icon">✓</div>
+            <h1>Email Successfully Changed</h1>
+            <p class="description">
+                Your email address has been updated. Please use your new email to sign in.
+            </p>
+            <div class="details" id="successDetails">
+                <!-- Details will be populated by JavaScript -->
+            </div>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button">Continue to Login</a>
+                <a href="https://forbble.com" class="button button-secondary">Go to Homepage</a>
+            </div>
+        </div>
+
+        <!-- Already Verified State -->
+        <div id="already_verified" class="hidden">
+            <div class="icon">ⓘ</div>
+            <h1>Already Verified</h1>
+            <p class="description">
+                This email change has already been verified. Your email should already be updated.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button">Continue to Login</a>
+                <a href="https://forbble.com" class="button button-secondary">Go to Homepage</a>
+            </div>
+        </div>
+
+        <!-- Expired State -->
+        <div id="expired" class="hidden">
+            <div class="icon">⌛</div>
+            <h1>Verification Link Expired</h1>
+            <p class="description">
+                This verification link has expired. Please request a new verification email.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button">Sign In to Request New Link</a>
+                <a href="https://forbble.com/support" class="button button-secondary">Contact Support</a>
+            </div>
+        </div>
+
+        <!-- Invalid State -->
+        <div id="invalid" class="hidden">
+            <div class="icon">✗</div>
+            <h1>Invalid Verification Link</h1>
+            <p class="description">
+                This verification link is invalid or has already been used.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button">Sign In to Request New Link</a>
+                <a href="https://forbble.com/support" class="button button-secondary">Contact Support</a>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="hidden">
+            <div class="icon">⚠</div>
+            <h1>Something Went Wrong</h1>
+            <p class="description" id="errorMessage">
+                An unexpected error occurred. Please try again or contact support.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button">Try Again</a>
+                <a href="https://forbble.com/support" class="button button-secondary">Contact Support</a>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading">
+            <div class="icon">⏳</div>
+            <h1>Processing...</h1>
+            <p class="description">
+                Please wait while we verify your email change.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const error = urlParams.get('error');
+        const userId = urlParams.get('user_id');
+        const oldEmail = urlParams.get('old_email');
+        const newEmail = urlParams.get('new_email');
+
+        // Hide loading state
+        document.getElementById('loading').classList.add('hidden');
+
+        // Show appropriate state based on status
+        let stateElement = null;
+        let stateClass = '';
+
+        switch(status) {
+            case 'success':
+                stateElement = document.getElementById('success');
+                stateClass = 'status-success';
+                
+                // Populate success details
+                const detailsHtml = `
+                    <div class="detail-item">
+                        <div class="detail-label">Previous Email</div>
+                        <div class="detail-value">${oldEmail || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">New Email</div>
+                        <div class="detail-value">${newEmail || 'N/A'}</div>
+                    </div>
+                    ${userId ? `<div class="detail-item">
+                        <div class="detail-label">User ID</div>
+                        <div class="detail-value">${userId}</div>
+                    </div>` : ''}
+                `;
+                document.getElementById('successDetails').innerHTML = detailsHtml;
+                break;
+                
+            case 'already_verified':
+                stateElement = document.getElementById('already_verified');
+                stateClass = 'status-already_verified';
+                break;
+                
+            case 'expired':
+                stateElement = document.getElementById('expired');
+                stateClass = 'status-expired';
+                break;
+                
+            case 'invalid':
+                stateElement = document.getElementById('invalid');
+                stateClass = 'status-invalid';
+                break;
+                
+            case 'error':
+                stateElement = document.getElementById('error');
+                stateClass = 'status-error';
+                if (error) {
+                    document.getElementById('errorMessage').textContent = 
+                        `Error: ${decodeURIComponent(error)}`;
+                }
+                break;
+                
+            default:
+                stateElement = document.getElementById('error');
+                stateClass = 'status-error';
+        }
+
+        // Show the state
+        if (stateElement) {
+            stateElement.classList.remove('hidden');
+            document.querySelector('.container').classList.add(stateClass);
+        }
+
+        // Auto-redirect for success after 5 seconds
+        if (status === 'success') {
+            setTimeout(() => {
+                window.location.href = 'https://forbble.com/login';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
