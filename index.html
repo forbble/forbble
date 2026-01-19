@@ -5,10 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Forbble</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Forbble | Social Network</title>
+    <meta name="description" content="Forbble is a modern social networking platform for meaningful connections and conversations.">
+    <meta name="keywords" content="social network, messaging, community, connections, Forbble">
+    <meta name="author" content="Forbble">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://forbble.com/">
+    <meta property="og:title" content="Forbble | Social Network">
+    <meta property="og:description" content="Forbble is a modern social networking platform for meaningful connections and conversations.">
+    <meta property="og:image" content="https://forbble.com/og-image.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://forbble.com/">
+    <meta property="twitter:title" content="Forbble | Social Network">
+    <meta property="twitter:description" content="Forbble is a modern social networking platform for meaningful connections and conversations.">
+    <meta property="twitter:image" content="https://forbble.com/og-image.png">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://forbble.com/">
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
-        /* === RESET & DISABLE ALL INTERACTIONS === */
         * {
             margin: 0;
             padding: 0;
@@ -51,7 +76,6 @@
             bottom: 0;
         }
 
-        /* === DISABLE ALL BROWSER BEHAVIORS === */
         body {
             -webkit-text-size-adjust: 100%;
             -moz-text-size-adjust: 100%;
@@ -60,7 +84,6 @@
             touch-action: pan-y;
         }
 
-        /* === CUSTOM SCROLLBAR === */
         .scroll-container {
             width: 100%;
             height: 100%;
@@ -82,11 +105,6 @@
             border-radius: 2px;
         }
 
-        .scroll-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* === APP STRUCTURE === */
         .app-wrapper {
             width: 100%;
             min-height: 100%;
@@ -94,30 +112,6 @@
             flex-direction: column;
         }
 
-        /* === HEADER (Forbble left-aligned) === */
-        .app-header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
-            background: var(--bg-primary);
-            border-bottom: 0.5px solid var(--border-subtle);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .app-title {
-            font-size: 24px;
-            font-weight: 300;
-            letter-spacing: -0.5px;
-            color: var(--text-primary);
-        }
-
-        /* === SECTIONS === */
         .section {
             min-height: 100vh;
             display: flex;
@@ -134,7 +128,6 @@
             text-align: center;
         }
 
-        /* === TYPOGRAPHY === */
         .hero-large {
             font-size: 52px;
             font-weight: 300;
@@ -164,7 +157,6 @@
             margin-top: 24px;
         }
 
-        /* === FOOTER === */
         .app-footer {
             width: 100%;
             padding: 40px 24px;
@@ -181,7 +173,6 @@
             line-height: 1.4;
         }
 
-        /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .section {
                 padding: 32px 20px;
@@ -194,23 +185,14 @@
             .hero-subtitle {
                 font-size: 16px;
             }
-            
-            .app-header {
-                padding: 0 20px;
-            }
         }
 
         @media (max-width: 360px) {
             .hero-large {
                 font-size: 38px;
             }
-            
-            .app-title {
-                font-size: 22px;
-            }
         }
 
-        /* === SAFE AREA SUPPORT === */
         @supports (padding: max(0px)) {
             .section {
                 padding-left: max(24px, env(safe-area-inset-left));
@@ -219,18 +201,11 @@
                 padding-bottom: max(40px, env(safe-area-inset-bottom));
             }
             
-            .app-header {
-                padding-top: env(safe-area-inset-top);
-                height: calc(60px + env(safe-area-inset-top));
-                padding-left: max(24px, env(safe-area-inset-left));
-            }
-            
             .app-footer {
                 padding-bottom: max(40px, env(safe-area-inset-bottom));
             }
         }
 
-        /* === SCROLL SNAP === */
         @media (min-height: 600px) {
             .section {
                 scroll-snap-align: start;
@@ -242,7 +217,6 @@
             }
         }
 
-        /* === PREVENT CONTEXT MENU === */
         .no-context {
             -webkit-context-menu: none;
             context-menu: none;
@@ -253,15 +227,10 @@
     <div class="scroll-container">
         <div class="app-wrapper">
             
-            <!-- HEADER (Forbble left-aligned) -->
-            <header class="app-header">
-                <h1 class="app-title">FORBBLE</h1>
-            </header>
-            
             <!-- MAIN SECTION -->
             <section class="section">
                 <div class="section-content">
-                    <h2 class="hero-large">Coming Soon</h2>
+                    <h1 class="hero-large">Forbble</h1>
                     <div class="divider"></div>
                     <p class="hero-subtitle">A new mobile experience</p>
                     <p class="status-text">In active development</p>
@@ -279,17 +248,13 @@
         </div>
     </div>
 
-    <!-- BLOCK KEYBOARD SHORTCUTS -->
     <script>
-        // Block all keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            // Block Ctrl/Command + any key
             if (e.ctrlKey || e.metaKey) {
                 e.preventDefault();
                 return false;
             }
             
-            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
             if (e.keyCode === 123 || 
                 (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
                 (e.ctrlKey && e.keyCode === 85)) {
@@ -300,33 +265,28 @@
             return false;
         });
 
-        // Block right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         });
 
-        // Block text selection
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
             return false;
         });
 
-        // Block drag and drop
         document.addEventListener('dragstart', function(e) {
             e.preventDefault();
             return false;
         });
 
-        // Prevent overscroll bounce
         document.addEventListener('touchmove', function(e) {
             if (e.target.classList.contains('scroll-container')) return;
             e.preventDefault();
         }, { passive: false });
 
-        // Block all keyboard input except scroll keys
         document.addEventListener('keydown', function(e) {
-            const allowedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40]; // Space, Page Up/Down, Home, End, Arrows
+            const allowedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40];
             if (!allowedKeys.includes(e.keyCode)) {
                 e.preventDefault();
                 return false;
