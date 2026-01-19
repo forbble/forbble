@@ -90,6 +90,30 @@
             font-family: monospace;
         }
         
+        .security-notice {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .security-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffc107;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+        
         .buttons {
             display: flex;
             flex-direction: column;
@@ -149,8 +173,23 @@
                     <p class="status-description">Your email has been successfully updated.</p>
                 </div>
                 <div class="details" id="successDetails"></div>
+                
+                <!-- Security Notice -->
+                <div id="securityNotice" class="security-notice">
+                    <div class="security-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Security Action Taken
+                    </div>
+                    <div class="security-text">
+                        For your security, all active sessions have been terminated on all devices.
+                        You must now sign in with your new email address.
+                    </div>
+                </div>
+                
                 <div class="buttons">
-                    <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
+                    <a href="https://forbble.com/login" class="button button-primary">Sign In with New Email</a>
                     <a href="https://forbble.com" class="button button-secondary">Return Home</a>
                 </div>
             </div>
@@ -161,8 +200,22 @@
                     <h2 class="status-title">Already Verified</h2>
                     <p class="status-description">This email change was already completed.</p>
                 </div>
+                
+                <div class="security-notice">
+                    <div class="security-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Security Notice
+                    </div>
+                    <div class="security-text">
+                        All sessions were terminated when this email was changed.
+                        If you haven't already, please sign in with your new email.
+                    </div>
+                </div>
+                
                 <div class="buttons">
-                    <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
+                    <a href="https://forbble.com/login" class="button button-primary">Sign In with New Email</a>
                     <a href="https://forbble.com" class="button button-secondary">Return Home</a>
                 </div>
             </div>
@@ -221,6 +274,8 @@
         const userId = params.get('user_id');
         const oldEmail = params.get('old_email');
         const newEmail = params.get('new_email');
+        const sessionsTerminated = params.get('sessions_terminated');
+        const requiresReauth = params.get('requires_reauthentication');
         
         document.getElementById('loading').classList.add('hidden');
         
@@ -240,6 +295,13 @@
                     </div>
                 `;
                 document.getElementById('successDetails').innerHTML = detailsHtml;
+                
+                // Show security notice only if sessions were terminated
+                if (sessionsTerminated === 'true' || requiresReauth === 'true') {
+                    document.getElementById('securityNotice').classList.remove('hidden');
+                } else {
+                    document.getElementById('securityNotice').classList.add('hidden');
+                }
                 break;
             case 'already_verified':
                 stateElement = document.getElementById('already_verified');
@@ -268,7 +330,7 @@
         if (status === 'success') {
             setTimeout(() => {
                 window.location.href = 'https://forbble.com/login';
-            }, 5000);
+            }, 8000);
         }
     </script>
 </body>
