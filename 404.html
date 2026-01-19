@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page not found - Forbble">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Page Not Found - Forbble</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-primary: rgba(255, 255, 255, 0.98);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --border-subtle: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+        
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        
+        .card {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .code {
+            font-size: 64px;
+            font-weight: 300;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            letter-spacing: -2px;
+        }
+        
+        .message {
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .description {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .button {
+            display: block;
+            text-align: center;
+            padding: 14px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 300;
+            transition: all 0.2s;
+            border: 1px solid var(--border-subtle);
+        }
+        
+        .button-primary {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-weight: 400;
+        }
+        
+        .button-secondary {
+            background: transparent;
+            color: var(--text-primary);
+        }
+        
+        .button:hover {
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 480px) {
+            .code {
+                font-size: 48px;
+            }
+            
+            .message {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="code">404</div>
+            <h2 class="message">Page Not Found</h2>
+            <p class="description">The page you are looking for doesn't exist or has been moved.</p>
+            <div class="buttons">
+                <a href="https://forbble.com" class="button button-primary">Go to Homepage</a>
+                <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
