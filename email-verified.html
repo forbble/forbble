@@ -2,204 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Verification - Forbble</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <meta name="description" content="Forbble email verification result">
+    <meta name="robots" content="noindex, nofollow">
     <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --success: rgba(76, 175, 80, 0.9);
+            --error: rgba(244, 67, 54, 0.9);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --glass-bg: rgba(26, 26, 26, 0.7);
-            --text-primary: rgba(255, 255, 255, 0.98);
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --text-tertiary: rgba(255, 255, 255, 0.5);
-            --border-subtle: rgba(255, 255, 255, 0.05);
-            --success: rgba(76, 175, 80, 0.9);
-            --error: rgba(244, 67, 54, 0.9);
-            --warning: rgba(255, 152, 0, 0.9);
-            --info: rgba(33, 150, 243, 0.9);
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 300;
-            line-height: 1.6;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
 
         body {
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-            overscroll-behavior: none;
-            touch-action: pan-y;
-        }
-
-        .scroll-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-        }
-
-        .scroll-container::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .scroll-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .scroll-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 2px;
-        }
-
-        .app-wrapper {
-            width: 100%;
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            padding: 0 24px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
-            border-bottom: 0.5px solid var(--border-subtle);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .app-title {
-            font-size: 24px;
-            font-weight: 300;
-            letter-spacing: -0.5px;
             color: var(--text-primary);
-        }
-
-        .section {
-            flex: 1;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 40px 24px;
-            position: relative;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.5;
         }
 
-        .section-content {
+        .container {
             max-width: 320px;
             width: 100%;
             text-align: center;
         }
 
-        .status-icon {
-            font-size: 52px;
-            font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
+        .icon {
+            font-size: 32px;
+            margin-bottom: 20px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .status-title {
-            font-size: 22px;
-            font-weight: 300;
-            margin-bottom: 16px;
+        .status-success .icon { color: var(--success); }
+        .status-already_verified .icon { color: var(--success); }
+        .status-expired .icon { color: var(--text-secondary); }
+        .status-invalid .icon { color: var(--error); }
+        .status-error .icon { color: var(--error); }
+
+        .title {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 8px;
             color: var(--text-primary);
         }
 
-        .status-description {
-            font-size: 16px;
-            font-weight: 300;
+        .description {
+            font-size: 14px;
             color: var(--text-secondary);
             margin-bottom: 24px;
         }
 
-        .details-box {
+        .details {
             background: var(--bg-secondary);
             border-radius: 8px;
-            padding: 20px;
+            padding: 16px;
             margin: 20px 0;
-            border: 0.5px solid var(--border-subtle);
             text-align: left;
+            border: 1px solid var(--border-subtle);
         }
 
-        .detail-row {
-            margin-bottom: 12px;
+        .detail-item {
+            margin-bottom: 8px;
         }
 
         .detail-label {
-            font-size: 13px;
-            color: var(--text-tertiary);
-            margin-bottom: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         .detail-value {
-            font-size: 15px;
+            font-size: 13px;
             color: var(--text-primary);
             word-break: break-all;
             font-family: monospace;
         }
 
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.15);
-            margin: 30px auto;
+        .actions {
+            margin-top: 24px;
         }
 
         .button {
-            display: inline-block;
+            display: block;
+            width: 100%;
             background: rgba(255, 255, 255, 0.1);
             color: var(--text-primary);
             text-decoration: none;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 300;
-            font-size: 15px;
-            border: 0.5px solid var(--border-subtle);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 400;
+            border: 1px solid var(--border-subtle);
             cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-            margin-bottom: 12px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            transition: background 0.2s;
+            margin-bottom: 8px;
         }
 
         .button:hover {
@@ -209,7 +121,7 @@
         .button-primary {
             background: var(--text-primary);
             color: var(--bg-primary);
-            font-weight: 400;
+            font-weight: 500;
         }
 
         .button-primary:hover {
@@ -219,167 +131,83 @@
         .hidden {
             display: none;
         }
-
-        .app-footer {
-            width: 100%;
-            padding: 40px 24px;
-            text-align: center;
-            border-top: 0.5px solid var(--border-subtle);
-            background: var(--bg-primary);
-        }
-
-        .footer-text {
-            font-size: 14px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 0.5px;
-            line-height: 1.4;
-        }
-
-        @media (max-width: 768px) {
-            .section {
-                padding: 32px 20px;
-            }
-            
-            .status-icon {
-                font-size: 44px;
-            }
-            
-            .status-title {
-                font-size: 20px;
-            }
-            
-            .app-header {
-                padding: 0 20px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .status-icon {
-                font-size: 38px;
-            }
-            
-            .app-title {
-                font-size: 22px;
-            }
-        }
-
-        @supports (padding: max(0px)) {
-            .section {
-                padding-left: max(24px, env(safe-area-inset-left));
-                padding-right: max(24px, env(safe-area-inset-right));
-                padding-top: max(40px, env(safe-area-inset-top));
-                padding-bottom: max(40px, env(safe-area-inset-bottom));
-            }
-            
-            .app-header {
-                padding-top: env(safe-area-inset-top);
-                height: calc(60px + env(safe-area-inset-top));
-                padding-left: max(24px, env(safe-area-inset-left));
-            }
-            
-            .app-footer {
-                padding-bottom: max(40px, env(safe-area-inset-bottom));
-            }
-        }
-
-        .no-context {
-            -webkit-context-menu: none;
-            context-menu: none;
-        }
     </style>
 </head>
-<body class="no-context" oncontextmenu="return false" ondragstart="return false" onselectstart="return false" onkeydown="return false">
-    <div class="scroll-container">
-        <div class="app-wrapper">
-            
-            <header class="app-header">
-                <h1 class="app-title">FORBBLE</h1>
-            </header>
-            
-            <section class="section">
-                <div class="section-content">
-                    
-                    <!-- Success State -->
-                    <div id="success" class="hidden">
-                        <div class="status-icon">✓</div>
-                        <h2 class="status-title">Email Verified</h2>
-                        <p class="status-description">
-                            Your email address has been successfully updated.
-                        </p>
-                        <div class="details-box" id="successDetails"></div>
-                        <div class="divider"></div>
-                        <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
-                        <a href="https://forbble.com" class="button">Go to Homepage</a>
-                    </div>
+<body>
+    <div class="container">
+        <!-- Success State -->
+        <div id="success" class="hidden">
+            <div class="icon">✓</div>
+            <h1 class="title">Email Updated</h1>
+            <p class="description">
+                Your email has been changed. Sign in with your new email.
+            </p>
+            <div class="details" id="successDetails"></div>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button button-primary">Sign In</a>
+                <a href="https://forbble.com" class="button">Homepage</a>
+            </div>
+        </div>
 
-                    <!-- Already Verified State -->
-                    <div id="already_verified" class="hidden">
-                        <div class="status-icon">✓</div>
-                        <h2 class="status-title">Already Verified</h2>
-                        <p class="status-description">
-                            This email change has already been verified.
-                        </p>
-                        <div class="divider"></div>
-                        <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
-                        <a href="https://forbble.com" class="button">Go to Homepage</a>
-                    </div>
+        <!-- Already Verified State -->
+        <div id="already_verified" class="hidden">
+            <div class="icon">✓</div>
+            <h1 class="title">Already Verified</h1>
+            <p class="description">
+                This email change is already complete.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button button-primary">Sign In</a>
+                <a href="https://forbble.com" class="button">Homepage</a>
+            </div>
+        </div>
 
-                    <!-- Expired State -->
-                    <div id="expired" class="hidden">
-                        <div class="status-icon">⌛</div>
-                        <h2 class="status-title">Link Expired</h2>
-                        <p class="status-description">
-                            This verification link has expired.
-                        </p>
-                        <div class="divider"></div>
-                        <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
-                        <a href="mailto:support@forbble.com" class="button">Contact Support</a>
-                    </div>
+        <!-- Expired State -->
+        <div id="expired" class="hidden">
+            <div class="icon">⌛</div>
+            <h1 class="title">Link Expired</h1>
+            <p class="description">
+                This verification link has expired.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
+                <a href="mailto:support@forbble.com" class="button">Support</a>
+            </div>
+        </div>
 
-                    <!-- Invalid State -->
-                    <div id="invalid" class="hidden">
-                        <div class="status-icon">✗</div>
-                        <h2 class="status-title">Invalid Link</h2>
-                        <p class="status-description">
-                            This verification link is invalid.
-                        </p>
-                        <div class="divider"></div>
-                        <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
-                        <a href="mailto:support@forbble.com" class="button">Contact Support</a>
-                    </div>
+        <!-- Invalid State -->
+        <div id="invalid" class="hidden">
+            <div class="icon">✗</div>
+            <h1 class="title">Invalid Link</h1>
+            <p class="description">
+                This verification link is invalid.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
+                <a href="mailto:support@forbble.com" class="button">Support</a>
+            </div>
+        </div>
 
-                    <!-- Error State -->
-                    <div id="error" class="hidden">
-                        <div class="status-icon">⚠</div>
-                        <h2 class="status-title">Something Went Wrong</h2>
-                        <p class="status-description" id="errorMessage">
-                            An unexpected error occurred.
-                        </p>
-                        <div class="divider"></div>
-                        <a href="https://forbble.com/login" class="button button-primary">Try Again</a>
-                        <a href="mailto:support@forbble.com" class="button">Contact Support</a>
-                    </div>
+        <!-- Error State -->
+        <div id="error" class="hidden">
+            <div class="icon">⚠</div>
+            <h1 class="title">Error</h1>
+            <p class="description" id="errorMessage">
+                An error occurred.
+            </p>
+            <div class="actions">
+                <a href="https://forbble.com/login" class="button button-primary">Try Again</a>
+                <a href="mailto:support@forbble.com" class="button">Support</a>
+            </div>
+        </div>
 
-                    <!-- Loading State -->
-                    <div id="loading">
-                        <div class="status-icon">⏳</div>
-                        <h2 class="status-title">Processing</h2>
-                        <p class="status-description">
-                            Verifying your email change...
-                        </p>
-                    </div>
-                    
-                </div>
-            </section>
-            
-            <footer class="app-footer">
-                <p class="footer-text">© 2026 Forbble</p>
-                <p class="footer-text" style="margin-top: 8px; font-size: 12px;">
-                    All rights reserved
-                </p>
-            </footer>
-            
+        <!-- Loading State -->
+        <div id="loading">
+            <div class="icon">⏳</div>
+            <h1 class="title">Processing</h1>
+            <p class="description">
+                Verifying email change...
+            </p>
         </div>
     </div>
 
@@ -398,36 +226,27 @@
         switch(status) {
             case 'success':
                 stateElement = document.getElementById('success');
-                
                 const detailsHtml = `
-                    <div class="detail-row">
-                        <div class="detail-label">Previous Email</div>
+                    <div class="detail-item">
+                        <div class="detail-label">Previous</div>
                         <div class="detail-value">${oldEmail || 'N/A'}</div>
                     </div>
-                    <div class="detail-row">
-                        <div class="detail-label">New Email</div>
+                    <div class="detail-item">
+                        <div class="detail-label">New</div>
                         <div class="detail-value">${newEmail || 'N/A'}</div>
                     </div>
-                    ${userId ? `<div class="detail-row">
-                        <div class="detail-label">User ID</div>
-                        <div class="detail-value">${userId}</div>
-                    </div>` : ''}
                 `;
                 document.getElementById('successDetails').innerHTML = detailsHtml;
                 break;
-                
             case 'already_verified':
                 stateElement = document.getElementById('already_verified');
                 break;
-                
             case 'expired':
                 stateElement = document.getElementById('expired');
                 break;
-                
             case 'invalid':
                 stateElement = document.getElementById('invalid');
                 break;
-                
             case 'error':
                 stateElement = document.getElementById('error');
                 if (error) {
@@ -435,64 +254,20 @@
                         `Error: ${decodeURIComponent(error)}`;
                 }
                 break;
-                
             default:
                 stateElement = document.getElementById('error');
         }
 
         if (stateElement) {
             stateElement.classList.remove('hidden');
+            document.body.classList.add(`status-${status || 'error'}`);
         }
 
         if (status === 'success') {
             setTimeout(() => {
                 window.location.href = 'https://forbble.com/login';
-            }, 5000);
+            }, 3000);
         }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                e.preventDefault();
-                return false;
-            }
-            
-            if (e.keyCode === 123 || 
-                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
-                (e.ctrlKey && e.keyCode === 85)) {
-                e.preventDefault();
-                return false;
-            }
-            
-            return false;
-        });
-
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('touchmove', function(e) {
-            if (e.target.classList.contains('scroll-container')) return;
-            e.preventDefault();
-        }, { passive: false });
-
-        document.addEventListener('keydown', function(e) {
-            const allowedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40];
-            if (!allowedKeys.includes(e.keyCode)) {
-                e.preventDefault();
-                return false;
-            }
-        });
     </script>
 </body>
 </html>
