@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Forbble email verification status page">
+    <meta name="description" content="Forbble email verification">
     <meta name="robots" content="noindex, nofollow">
     <title>Email Verification - Forbble</title>
     <style>
@@ -45,55 +45,62 @@
             border-radius: 12px;
             padding: 40px 32px;
             border: 1px solid var(--border-subtle);
+            text-align: center;
         }
         
-        .status {
-            text-align: center;
-            margin-bottom: 32px;
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+        
+        .status-success {
+            color: #4CAF50;
+        }
+        
+        .status-error {
+            color: #F44336;
         }
         
         .status-title {
             font-size: 22px;
             font-weight: 300;
             margin-bottom: 12px;
-            color: var(--text-primary);
         }
         
         .status-description {
             font-size: 15px;
             color: var(--text-secondary);
             margin-bottom: 8px;
+            line-height: 1.5;
         }
         
-        .details {
+        .email-details {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 8px;
-            padding: 20px;
-            margin: 24px 0;
+            padding: 16px;
+            margin: 20px 0;
             border: 1px solid var(--border-subtle);
-        }
-        
-        .detail-row {
-            margin-bottom: 12px;
-        }
-        
-        .detail-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        
-        .detail-value {
             font-size: 14px;
-            color: var(--text-primary);
-            word-break: break-all;
+        }
+        
+        .email-row {
+            margin: 8px 0;
+            text-align: left;
+        }
+        
+        .email-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .email-value {
             font-family: monospace;
+            word-break: break-all;
         }
         
         .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            margin-top: 32px;
         }
         
         .button {
@@ -105,18 +112,15 @@
             font-size: 15px;
             font-weight: 300;
             transition: all 0.2s;
-            border: 1px solid var(--border-subtle);
+            border: none;
+            width: 100%;
+            cursor: pointer;
         }
         
         .button-primary {
             background: var(--text-primary);
             color: var(--bg-primary);
             font-weight: 400;
-        }
-        
-        .button-secondary {
-            background: transparent;
-            color: var(--text-primary);
         }
         
         .button:hover {
@@ -131,10 +135,6 @@
             .card {
                 padding: 32px 24px;
             }
-            
-            .status-title {
-                font-size: 20px;
-            }
         }
     </style>
 </head>
@@ -142,72 +142,55 @@
     <div class="container">
         <div class="card">
             
-            <!-- Success State -->
+            <!-- Success -->
             <div id="success" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Email Verified</h2>
-                    <p class="status-description">Your email has been successfully updated.</p>
-                </div>
-                <div class="details" id="successDetails"></div>
+                <div class="status-icon status-success">✓</div>
+                <h2 class="status-title">Email Updated</h2>
+                <p class="status-description">Your email address has been verified and updated.</p>
+                <p class="status-description">You have been signed out of all devices.</p>
+                <div id="successDetails" class="email-details"></div>
                 <div class="buttons">
                     <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
-                    <a href="https://forbble.com" class="button button-secondary">Return Home</a>
                 </div>
             </div>
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Already Verified</h2>
-                    <p class="status-description">This email change was already completed.</p>
-                </div>
+                <div class="status-icon status-success">✓</div>
+                <h2 class="status-title">Already Verified</h2>
+                <p class="status-description">This email change was already completed.</p>
                 <div class="buttons">
                     <a href="https://forbble.com/login" class="button button-primary">Continue to Login</a>
-                    <a href="https://forbble.com" class="button button-secondary">Return Home</a>
                 </div>
             </div>
             
             <!-- Expired -->
             <div id="expired" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Link Expired</h2>
-                    <p class="status-description">This verification link has expired.</p>
-                </div>
+                <div class="status-icon status-error">✗</div>
+                <h2 class="status-title">Link Expired</h2>
+                <p class="status-description">This verification link has expired.</p>
                 <div class="buttons">
                     <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
-                    <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
                 </div>
             </div>
             
             <!-- Invalid -->
             <div id="invalid" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Invalid Link</h2>
-                    <p class="status-description">This verification link is invalid.</p>
-                </div>
+                <div class="status-icon status-error">✗</div>
+                <h2 class="status-title">Invalid Link</h2>
+                <p class="status-description">This verification link is invalid.</p>
                 <div class="buttons">
                     <a href="https://forbble.com/login" class="button button-primary">Request New Link</a>
-                    <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
                 </div>
             </div>
             
             <!-- Error -->
             <div id="error" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Error</h2>
-                    <p class="status-description" id="errorMessage">An error occurred during verification.</p>
-                </div>
+                <div class="status-icon status-error">✗</div>
+                <h2 class="status-title">Error</h2>
+                <p class="status-description">An error occurred during verification.</p>
                 <div class="buttons">
                     <a href="https://forbble.com/login" class="button button-primary">Try Again</a>
-                    <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
-                </div>
-            </div>
-            
-            <!-- Loading -->
-            <div id="loading">
-                <div class="status">
-                    <h2 class="status-title">Processing</h2>
-                    <p class="status-description">Verifying your email...</p>
                 </div>
             </div>
             
@@ -217,29 +200,27 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
-        const error = params.get('error');
-        const userId = params.get('user_id');
         const oldEmail = params.get('old_email');
         const newEmail = params.get('new_email');
-        
-        document.getElementById('loading').classList.add('hidden');
         
         let stateElement = null;
         
         switch(status) {
             case 'success':
                 stateElement = document.getElementById('success');
-                const detailsHtml = `
-                    <div class="detail-row">
-                        <div class="detail-label">Previous Email</div>
-                        <div class="detail-value">${oldEmail || 'N/A'}</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">New Email</div>
-                        <div class="detail-value">${newEmail || 'N/A'}</div>
-                    </div>
-                `;
-                document.getElementById('successDetails').innerHTML = detailsHtml;
+                if (oldEmail && newEmail) {
+                    const detailsHtml = `
+                        <div class="email-row">
+                            <div class="email-label">Previous email</div>
+                            <div class="email-value">${oldEmail}</div>
+                        </div>
+                        <div class="email-row">
+                            <div class="email-label">New email</div>
+                            <div class="email-value">${newEmail}</div>
+                        </div>
+                    `;
+                    document.getElementById('successDetails').innerHTML = detailsHtml;
+                }
                 break;
             case 'already_verified':
                 stateElement = document.getElementById('already_verified');
@@ -252,10 +233,6 @@
                 break;
             case 'error':
                 stateElement = document.getElementById('error');
-                if (error) {
-                    document.getElementById('errorMessage').textContent = 
-                        `Error: ${decodeURIComponent(error)}`;
-                }
                 break;
             default:
                 stateElement = document.getElementById('error');
@@ -263,12 +240,6 @@
         
         if (stateElement) {
             stateElement.classList.remove('hidden');
-        }
-        
-        if (status === 'success') {
-            setTimeout(() => {
-                window.location.href = 'https://forbble.com/login';
-            }, 5000);
         }
     </script>
 </body>
