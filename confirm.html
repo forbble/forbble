@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Email verification status">
+    <meta name="description" content="Email confirmation - Forbble">
     <meta name="robots" content="noindex, nofollow">
     <title>Forbble</title>
     <style>
@@ -13,8 +13,8 @@
             --text-primary: rgba(255, 255, 255, 0.98);
             --text-secondary: rgba(255, 255, 255, 0.7);
             --border-subtle: rgba(255, 255, 255, 0.05);
-            --button-primary: #ffffff;
-            --button-text: #000000;
+            --button-bg: rgba(255, 255, 255, 0.95);
+            --button-text: #0a0a0a;
         }
         
         * {
@@ -42,43 +42,40 @@
         
         .card {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background: var(--bg-secondary);
             border-radius: 12px;
-            padding: 32px;
+            padding: 40px 32px;
             border: 1px solid var(--border-subtle);
+            text-align: center;
         }
         
-        .status {
-            margin-bottom: 32px;
-        }
-        
-        .status-title {
-            font-size: 20px;
+        .title {
+            font-size: 22px;
             font-weight: 300;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
             color: var(--text-primary);
         }
         
-        .status-description {
-            font-size: 14px;
+        .message {
+            font-size: 15px;
             color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.5;
         }
         
         .button {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 400;
-            background: var(--button-primary);
+            display: inline-block;
+            background: var(--button-bg);
             color: var(--button-text);
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 400;
+            transition: opacity 0.2s;
             border: none;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
         
         .button:hover {
@@ -88,73 +85,61 @@
         .hidden {
             display: none;
         }
+        
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card">
             
-            <!-- Success State -->
+            <!-- Success -->
             <div id="success" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Email Verified</h2>
-                    <p class="status-description">Your email has been successfully updated.</p>
-                </div>
-                <button onclick="window.location.href='https://forbble.com/login'" class="button">
-                    Continue to Login
-                </button>
+                <h2 class="title">Email Updated</h2>
+                <p class="message">Your email has been verified and updated successfully.</p>
+                <a href="https://forbble.com/login" class="button">Log in</a>
             </div>
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Already Verified</h2>
-                    <p class="status-description">This email change was already completed.</p>
-                </div>
-                <button onclick="window.location.href='https://forbble.com/login'" class="button">
-                    Continue to Login
-                </button>
+                <h2 class="title">Already Verified</h2>
+                <p class="message">This email change was already completed.</p>
+                <a href="https://forbble.com/login" class="button">Log in</a>
             </div>
             
             <!-- Expired -->
             <div id="expired" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Link Expired</h2>
-                    <p class="status-description">This verification link has expired.</p>
-                </div>
-                <button onclick="window.location.href='https://forbble.com/login'" class="button">
-                    Request New Link
-                </button>
+                <h2 class="title">Link Expired</h2>
+                <p class="message">This verification link has expired.</p>
+                <a href="https://forbble.com/login" class="button">Request New Link</a>
             </div>
             
             <!-- Invalid -->
             <div id="invalid" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Invalid Link</h2>
-                    <p class="status-description">This verification link is invalid.</p>
-                </div>
-                <button onclick="window.location.href='https://forbble.com/login'" class="button">
-                    Request New Link
-                </button>
+                <h2 class="title">Invalid Link</h2>
+                <p class="message">This verification link is invalid.</p>
+                <a href="https://forbble.com/login" class="button">Request New Link</a>
             </div>
             
             <!-- Error -->
             <div id="error" class="hidden">
-                <div class="status">
-                    <h2 class="status-title">Error</h2>
-                    <p class="status-description" id="errorMessage">An error occurred during verification.</p>
-                </div>
-                <button onclick="window.location.href='https://forbble.com/login'" class="button">
-                    Try Again
-                </button>
+                <h2 class="title">Error</h2>
+                <p class="message" id="errorMessage">An error occurred during verification.</p>
+                <a href="https://forbble.com/login" class="button">Try Again</a>
             </div>
             
             <!-- Loading -->
             <div id="loading">
-                <div class="status">
-                    <h2 class="status-title">Processing</h2>
-                    <p class="status-description">Verifying your email...</p>
-                </div>
+                <h2 class="title">Processing</h2>
+                <p class="message">Verifying your email...</p>
             </div>
             
         </div>
@@ -186,7 +171,7 @@
                 stateElement = document.getElementById('error');
                 if (error) {
                     document.getElementById('errorMessage').textContent = 
-                        `Error: ${decodeURIComponent(error)}`;
+                        decodeURIComponent(error);
                 }
                 break;
             default:
@@ -199,4 +184,3 @@
     </script>
 </body>
 </html>
-
