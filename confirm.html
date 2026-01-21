@@ -15,6 +15,8 @@
             --border-subtle: rgba(255, 255, 255, 0.05);
             --button-bg: rgba(255, 255, 255, 0.95);
             --button-text: #0a0a0a;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
         }
         
         * {
@@ -42,12 +44,37 @@
         
         .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             background: var(--bg-secondary);
             border-radius: 12px;
             padding: 40px 32px;
             border: 1px solid var(--border-subtle);
             text-align: center;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        
+        .icon.success {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .icon.error {
+            background: var(--error-color);
+            color: white;
+        }
+        
+        .icon.info {
+            background: var(--border-subtle);
+            color: var(--text-primary);
         }
         
         .title {
@@ -76,6 +103,7 @@
             transition: opacity 0.2s;
             border: none;
             cursor: pointer;
+            margin-top: 16px;
         }
         
         .button:hover {
@@ -101,8 +129,27 @@
     <div class="container">
         <div class="card">
             
-            <!-- Success -->
+            <!-- Signup Success -->
+            <div id="signup_success" class="hidden">
+                <div class="icon success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h2 class="title">Email Verified</h2>
+                <p class="message">Your email has been verified successfully. You can now sign in to your account.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
+            </div>
+            
+            <!-- Email Change Success -->
             <div id="success" class="hidden">
+                <div class="icon success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
                 <h2 class="title">Email Updated</h2>
                 <p class="message">Your email has been verified and updated successfully.</p>
                 <a href="https://forbble.com/login" class="button">Log in</a>
@@ -110,6 +157,13 @@
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
+                <div class="icon info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </div>
                 <h2 class="title">Already Verified</h2>
                 <p class="message">This email change was already completed.</p>
                 <a href="https://forbble.com/login" class="button">Log in</a>
@@ -117,6 +171,13 @@
             
             <!-- Expired -->
             <div id="expired" class="hidden">
+                <div class="icon error">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
                 <h2 class="title">Link Expired</h2>
                 <p class="message">This verification link has expired.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
@@ -124,6 +185,13 @@
             
             <!-- Invalid -->
             <div id="invalid" class="hidden">
+                <div class="icon error">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
                 <h2 class="title">Invalid Link</h2>
                 <p class="message">This verification link is invalid.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
@@ -131,6 +199,13 @@
             
             <!-- Error -->
             <div id="error" class="hidden">
+                <div class="icon error">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
                 <h2 class="title">Error</h2>
                 <p class="message" id="errorMessage">An error occurred during verification.</p>
                 <a href="https://forbble.com/login" class="button">Try Again</a>
@@ -138,8 +213,13 @@
             
             <!-- Loading -->
             <div id="loading">
+                <div class="icon info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                </div>
                 <h2 class="title">Processing</h2>
-                <p class="message">Verifying your email...</p>
+                <p class="message" id="loadingMessage">Verifying your email...</p>
             </div>
             
         </div>
@@ -149,37 +229,74 @@
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
         const error = params.get('error');
+        const type = params.get('type');
+        const userId = params.get('user_id');
         
         document.getElementById('loading').classList.add('hidden');
         
         let stateElement = null;
         
-        switch(status) {
-            case 'success':
-                stateElement = document.getElementById('success');
-                break;
-            case 'already_verified':
-                stateElement = document.getElementById('already_verified');
-                break;
-            case 'expired':
-                stateElement = document.getElementById('expired');
-                break;
-            case 'invalid':
-                stateElement = document.getElementById('invalid');
-                break;
-            case 'error':
-                stateElement = document.getElementById('error');
-                if (error) {
-                    document.getElementById('errorMessage').textContent = 
-                        decodeURIComponent(error);
+        if (type === 'signup' && userId) {
+            document.getElementById('loadingMessage').textContent = 'Verifying your signup...';
+            document.getElementById('loading').classList.remove('hidden');
+            
+            fetch('https://xzehukwzazozqljatjdl.supabase.co/functions/v1/verify-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    action: 'verify_email'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    stateElement = document.getElementById('signup_success');
+                } else {
+                    stateElement = document.getElementById('error');
+                    document.getElementById('errorMessage').textContent = data.error || 'Verification failed';
                 }
-                break;
-            default:
+                showState();
+            })
+            .catch(error => {
                 stateElement = document.getElementById('error');
+                document.getElementById('errorMessage').textContent = 'Network error. Please try again.';
+                showState();
+            });
+        } else {
+            switch(status) {
+                case 'success':
+                    stateElement = document.getElementById('success');
+                    break;
+                case 'already_verified':
+                    stateElement = document.getElementById('already_verified');
+                    break;
+                case 'expired':
+                    stateElement = document.getElementById('expired');
+                    break;
+                case 'invalid':
+                    stateElement = document.getElementById('invalid');
+                    break;
+                case 'error':
+                    stateElement = document.getElementById('error');
+                    if (error) {
+                        document.getElementById('errorMessage').textContent = 
+                            decodeURIComponent(error);
+                    }
+                    break;
+                default:
+                    stateElement = document.getElementById('error');
+            }
+            showState();
         }
         
-        if (stateElement) {
-            stateElement.classList.remove('hidden');
+        function showState() {
+            document.getElementById('loading').classList.add('hidden');
+            if (stateElement) {
+                stateElement.classList.remove('hidden');
+            }
         }
     </script>
 </body>
