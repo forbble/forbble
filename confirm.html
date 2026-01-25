@@ -15,6 +15,9 @@
             --border-subtle: rgba(255, 255, 255, 0.05);
             --button-bg: rgba(255, 255, 255, 0.95);
             --button-text: #0a0a0a;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --warning-color: #ff9800;
         }
         
         * {
@@ -42,7 +45,7 @@
         
         .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             background: var(--bg-secondary);
             border-radius: 12px;
             padding: 40px 32px;
@@ -50,9 +53,35 @@
             text-align: center;
         }
         
+        .icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 28px;
+        }
+        
+        .icon-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success-color);
+        }
+        
+        .icon-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error-color);
+        }
+        
+        .icon-warning {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--warning-color);
+        }
+        
         .title {
             font-size: 22px;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 16px;
             color: var(--text-primary);
         }
@@ -61,7 +90,17 @@
             font-size: 15px;
             color: var(--text-secondary);
             margin-bottom: 32px;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+        
+        .details {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
         }
         
         .button {
@@ -72,14 +111,21 @@
             padding: 12px 28px;
             border-radius: 8px;
             font-size: 15px;
-            font-weight: 400;
+            font-weight: 500;
             transition: opacity 0.2s;
             border: none;
             cursor: pointer;
+            margin-top: 16px;
         }
         
         .button:hover {
             opacity: 0.9;
+        }
+        
+        .button-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
         }
         
         .hidden {
@@ -94,6 +140,10 @@
             .title {
                 font-size: 20px;
             }
+            
+            .message {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -101,45 +151,70 @@
     <div class="container">
         <div class="card">
             
-            <!-- Success -->
-            <div id="success" class="hidden">
+            <!-- Success - Email Verified -->
+            <div id="success_email_verified" class="hidden">
+                <div class="icon icon-success">✓</div>
+                <h2 class="title">Email Verified</h2>
+                <p class="message">Your email has been verified successfully. You can now sign in to your account.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
+            </div>
+            
+            <!-- Success - Password Reset -->
+            <div id="success_password_reset" class="hidden">
+                <div class="icon icon-success">✓</div>
+                <h2 class="title">Password Reset</h2>
+                <p class="message">Your password has been reset successfully. Please sign in with your new password.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
+            </div>
+            
+            <!-- Success - Email Changed -->
+            <div id="success_email_changed" class="hidden">
+                <div class="icon icon-success">✓</div>
                 <h2 class="title">Email Updated</h2>
-                <p class="message">Your email has been verified and updated successfully.</p>
-                <a href="https://forbble.com/login" class="button">Log in</a>
+                <p class="message">Your email has been verified and updated successfully. Please sign in with your new email.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
             </div>
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
+                <div class="icon icon-warning">!</div>
                 <h2 class="title">Already Verified</h2>
-                <p class="message">This email change was already completed.</p>
-                <a href="https://forbble.com/login" class="button">Log in</a>
+                <p class="message">This email was already verified. No further action is needed.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
             </div>
             
             <!-- Expired -->
             <div id="expired" class="hidden">
+                <div class="icon icon-warning">!</div>
                 <h2 class="title">Link Expired</h2>
-                <p class="message">This verification link has expired.</p>
+                <p class="message">This verification link has expired. Please request a new one.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
+                <a href="https://forbble.com" class="button button-secondary" style="margin-left: 12px;">Home</a>
             </div>
             
             <!-- Invalid -->
             <div id="invalid" class="hidden">
+                <div class="icon icon-error">✗</div>
                 <h2 class="title">Invalid Link</h2>
-                <p class="message">This verification link is invalid.</p>
+                <p class="message">This verification link is invalid or has already been used.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
+                <a href="https://forbble.com" class="button button-secondary" style="margin-left: 12px;">Home</a>
             </div>
             
             <!-- Error -->
             <div id="error" class="hidden">
+                <div class="icon icon-error">✗</div>
                 <h2 class="title">Error</h2>
                 <p class="message" id="errorMessage">An error occurred during verification.</p>
+                <div class="details" id="errorDetails"></div>
                 <a href="https://forbble.com/login" class="button">Try Again</a>
+                <a href="https://forbble.com" class="button button-secondary" style="margin-left: 12px;">Home</a>
             </div>
             
             <!-- Loading -->
             <div id="loading">
                 <h2 class="title">Processing</h2>
-                <p class="message">Verifying your email...</p>
+                <p class="message">Verifying your request...</p>
             </div>
             
         </div>
@@ -148,7 +223,9 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
+        const type = params.get('type');
         const error = params.get('error');
+        const userId = params.get('user_id');
         
         document.getElementById('loading').classList.add('hidden');
         
@@ -156,7 +233,19 @@
         
         switch(status) {
             case 'success':
-                stateElement = document.getElementById('success');
+                switch(type) {
+                    case 'email_verified':
+                        stateElement = document.getElementById('success_email_verified');
+                        break;
+                    case 'password_reset':
+                        stateElement = document.getElementById('success_password_reset');
+                        break;
+                    case 'email_changed':
+                        stateElement = document.getElementById('success_email_changed');
+                        break;
+                    default:
+                        stateElement = document.getElementById('success_email_verified');
+                }
                 break;
             case 'already_verified':
                 stateElement = document.getElementById('already_verified');
@@ -170,16 +259,36 @@
             case 'error':
                 stateElement = document.getElementById('error');
                 if (error) {
-                    document.getElementById('errorMessage').textContent = 
-                        decodeURIComponent(error);
+                    const errorMessage = document.getElementById('errorMessage');
+                    const errorDetails = document.getElementById('errorDetails');
+                    
+                    const decodedError = decodeURIComponent(error);
+                    errorMessage.textContent = 'An error occurred:';
+                    
+                    // Show detailed error for developers
+                    if (decodedError.includes('token') || 
+                        decodedError.includes('expired') ||
+                        decodedError.includes('invalid')) {
+                        errorDetails.textContent = decodedError;
+                        errorDetails.style.display = 'block';
+                    }
                 }
                 break;
             default:
                 stateElement = document.getElementById('error');
+                document.getElementById('errorMessage').textContent = 
+                    'Unable to process your request.';
         }
         
         if (stateElement) {
             stateElement.classList.remove('hidden');
+        }
+        
+        // Auto-redirect on success after 5 seconds
+        if (status === 'success') {
+            setTimeout(() => {
+                window.location.href = 'https://forbble.com/login';
+            }, 5000);
         }
     </script>
 </body>
