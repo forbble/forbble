@@ -15,6 +15,9 @@
             --border-subtle: rgba(255, 255, 255, 0.05);
             --button-bg: rgba(255, 255, 255, 0.95);
             --button-text: #0a0a0a;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
         }
         
         * {
@@ -42,7 +45,7 @@
         
         .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 460px;
             background: var(--bg-secondary);
             border-radius: 12px;
             padding: 40px 32px;
@@ -76,14 +79,67 @@
             transition: opacity 0.2s;
             border: none;
             cursor: pointer;
+            margin: 8px;
         }
         
         .button:hover {
             opacity: 0.9;
         }
         
+        .button-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+        
         .hidden {
             display: none;
+        }
+        
+        .error-box {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--error-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .error-title {
+            color: var(--error-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .success-box {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .success-title {
+            color: var(--success-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .code {
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            word-break: break-all;
+            margin: 12px 0;
         }
         
         @media (max-width: 480px) {
@@ -94,6 +150,12 @@
             .title {
                 font-size: 20px;
             }
+            
+            .button {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
         }
     </style>
 </head>
@@ -103,43 +165,90 @@
             
             <!-- Success -->
             <div id="success" class="hidden">
-                <h2 class="title">Email Verified</h2>
-                <p class="message">Your email has been verified successfully. You can now sign in to your account.</p>
-                <a href="https://forbble.com/login" class="button">Sign In</a>
+                <div class="success-box">
+                    <div class="success-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                        Email Verified Successfully
+                    </div>
+                    <p>Your email address has been confirmed and your account is now active.</p>
+                </div>
+                <p class="message">You can now sign in to your Forbble account.</p>
+                <a href="https://forbble.com/login" class="button">Sign In to Forbble</a>
+                <a href="https://forbble.com" class="button button-secondary">Visit Homepage</a>
             </div>
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
                 <h2 class="title">Already Verified</h2>
-                <p class="message">This email address was already verified.</p>
+                <p class="message">This email address was already verified. You can sign in to your account.</p>
                 <a href="https://forbble.com/login" class="button">Sign In</a>
+                <a href="https://forbble.com" class="button button-secondary">Go to Homepage</a>
             </div>
             
-            <!-- Expired -->
+            <!-- Link Expired -->
             <div id="expired" class="hidden">
-                <h2 class="title">Link Expired</h2>
-                <p class="message">This verification link has expired. Please request a new verification email.</p>
-                <a href="https://forbble.com/login" class="button">Request New Link</a>
+                <div class="error-box">
+                    <div class="error-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        Verification Link Expired
+                    </div>
+                    <p>This verification link has expired. Email verification links are valid for 24 hours.</p>
+                </div>
+                <p class="message">Please request a new verification link from the app.</p>
+                <a href="https://forbble.com/login" class="button">Go to Login</a>
+                <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
             </div>
             
-            <!-- Invalid -->
+            <!-- Invalid Link -->
             <div id="invalid" class="hidden">
-                <h2 class="title">Invalid Link</h2>
-                <p class="message">This verification link is invalid or has already been used.</p>
-                <a href="https://forbble.com/login" class="button">Request New Link</a>
+                <div class="error-box">
+                    <div class="error-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        Invalid Verification Link
+                    </div>
+                    <p>This verification link is invalid or has already been used.</p>
+                </div>
+                <p class="message">Please request a new verification link from the app.</p>
+                <a href="https://forbble.com/login" class="button">Go to Login</a>
+                <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
             </div>
             
-            <!-- Error -->
-            <div id="error" class="hidden">
-                <h2 class="title">Error</h2>
-                <p class="message" id="errorMessage">An error occurred during verification.</p>
-                <a href="https://forbble.com/login" class="button">Try Again</a>
+            <!-- Supabase Error -->
+            <div id="supabase_error" class="hidden">
+                <div class="error-box">
+                    <div class="error-title" id="supabase_error_title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        Verification Error
+                    </div>
+                    <p id="supabase_error_message">An error occurred during verification.</p>
+                    <div class="code" id="supabase_error_code"></div>
+                </div>
+                <p class="message" id="supabase_error_help"></p>
+                <a href="https://forbble.com/login" class="button" id="supabase_error_button">Go to Login</a>
+                <a href="mailto:support@forbble.com" class="button button-secondary">Contact Support</a>
             </div>
             
             <!-- Loading -->
             <div id="loading">
                 <h2 class="title">Verifying Email</h2>
                 <p class="message">Please wait while we verify your email address...</p>
+                <div style="margin-top: 24px;">
+                    <div style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: white; border-radius: 50%; margin: 0 auto; animation: spin 1s linear infinite;"></div>
+                </div>
             </div>
             
         </div>
@@ -154,49 +263,54 @@
         const token = urlParams.get('token');
         const type = urlParams.get('type');
         
-        console.log('URL Parameters:', {
-            error,
-            errorCode,
-            errorDescription,
-            token,
-            type
-        });
-        
         // Show loading state initially
         document.getElementById('loading').classList.remove('hidden');
         
-        // Check for Supabase errors first
+        // Check for Supabase OAuth errors first
         if (error || errorCode || errorDescription) {
             console.log('Supabase error detected:', { error, errorCode, errorDescription });
             
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
+                const errorDiv = document.getElementById('supabase_error');
                 
-                let stateElement = null;
-                
+                // Set error details
                 if (errorCode === 'otp_expired') {
-                    stateElement = document.getElementById('expired');
+                    document.getElementById('supabase_error_title').innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Verification Link Expired
+                    `;
+                    document.getElementById('supabase_error_message').textContent = 
+                        'This verification link has expired. Email verification links are valid for 24 hours.';
+                    document.getElementById('supabase_error_help').textContent = 
+                        'Please request a new verification email from the Forbble app.';
+                    document.getElementById('supabase_error_button').textContent = 'Go to Login';
+                    document.getElementById('supabase_error_button').href = 'https://forbble.com/login';
                 } else if (error === 'access_denied') {
-                    stateElement = document.getElementById('invalid');
-                } else {
-                    stateElement = document.getElementById('error');
-                    if (errorDescription) {
-                        document.getElementById('errorMessage').textContent = 
-                            decodeURIComponent(errorDescription).replace(/\+/g, ' ');
-                    }
+                    document.getElementById('supabase_error_message').textContent = 
+                        decodeURIComponent(errorDescription || 'Access denied. This link may be invalid or has already been used.');
+                    document.getElementById('supabase_error_help').textContent = 
+                        'Please request a new verification email if you need to verify your account.';
                 }
                 
-                if (stateElement) {
-                    stateElement.classList.remove('hidden');
+                // Show error code if available
+                if (errorCode) {
+                    document.getElementById('supabase_error_code').textContent = 
+                        `Error Code: ${errorCode}`;
                 }
+                
+                errorDiv.classList.remove('hidden');
             }, 1000);
             
         } 
         // Check if this is a successful Supabase verification
         else if (token && type) {
-            console.log('Supabase verification successful:', { token, type });
+            console.log('Supabase verification detected:', { token, type });
             
-            // You can show appropriate message based on type
+            // Determine message based on type
             let title = 'Email Verified';
             let message = 'Your email has been verified successfully.';
             
@@ -225,17 +339,27 @@
             
             // Update the success message
             const successDiv = document.getElementById('success');
-            successDiv.querySelector('.title').textContent = title;
-            successDiv.querySelector('.message').textContent = message;
+            successDiv.querySelector('.success-title').innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                ${title}
+            `;
+            successDiv.querySelector('.success-box p').textContent = message;
             
             // Show success after a brief delay
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
                 successDiv.classList.remove('hidden');
+                
+                // Auto-redirect to login after 5 seconds
+                setTimeout(() => {
+                    window.location.href = 'https://forbble.com/login';
+                }, 5000);
             }, 1500);
             
         } else {
-            // Handle our custom status parameters (for email change flow)
+            // Handle our custom status parameters
             const status = urlParams.get('status');
             const customError = urlParams.get('error');
             
@@ -257,16 +381,12 @@
                     case 'invalid':
                         stateElement = document.getElementById('invalid');
                         break;
-                    case 'error':
-                        stateElement = document.getElementById('error');
+                    default:
+                        stateElement = document.getElementById('supabase_error');
                         if (customError) {
-                            document.getElementById('errorMessage').textContent = 
+                            document.getElementById('supabase_error_message').textContent = 
                                 decodeURIComponent(customError);
                         }
-                        break;
-                    default:
-                        // If no parameters, show success (maybe user refreshed page)
-                        stateElement = document.getElementById('success');
                 }
                 
                 if (stateElement) {
@@ -274,6 +394,15 @@
                 }
             }, 1000);
         }
+        
+        // CSS for spinner animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
