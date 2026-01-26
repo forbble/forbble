@@ -103,16 +103,16 @@
             
             <!-- Success -->
             <div id="success" class="hidden">
-                <h2 class="title">Email Updated</h2>
-                <p class="message">Your email has been verified and updated successfully.</p>
-                <a href="https://forbble.com/login" class="button">Log in</a>
+                <h2 class="title">Email Verified</h2>
+                <p class="message">Your email has been verified successfully. You can now sign in to your account.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
             </div>
             
             <!-- Already Verified -->
             <div id="already_verified" class="hidden">
                 <h2 class="title">Already Verified</h2>
-                <p class="message">This email change was already completed.</p>
-                <a href="https://forbble.com/login" class="button">Log in</a>
+                <p class="message">This email address was already verified.</p>
+                <a href="https://forbble.com/login" class="button">Sign In</a>
             </div>
             
             <!-- Expired -->
@@ -125,7 +125,7 @@
             <!-- Invalid -->
             <div id="invalid" class="hidden">
                 <h2 class="title">Invalid Link</h2>
-                <p class="message">This verification link is invalid.</p>
+                <p class="message">This verification link is invalid or has already been used.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
             </div>
             
@@ -138,48 +138,103 @@
             
             <!-- Loading -->
             <div id="loading">
-                <h2 class="title">Processing</h2>
-                <p class="message">Verifying your email...</p>
+                <h2 class="title">Verifying Email</h2>
+                <p class="message">Please wait while we verify your email address...</p>
             </div>
             
         </div>
     </div>
     
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const status = params.get('status');
-        const error = params.get('error');
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const type = urlParams.get('type');
         
-        document.getElementById('loading').classList.add('hidden');
+        // Show loading state initially
+        document.getElementById('loading').classList.remove('hidden');
         
-        let stateElement = null;
-        
-        switch(status) {
-            case 'success':
-                stateElement = document.getElementById('success');
-                break;
-            case 'already_verified':
-                stateElement = document.getElementById('already_verified');
-                break;
-            case 'expired':
-                stateElement = document.getElementById('expired');
-                break;
-            case 'invalid':
-                stateElement = document.getElementById('invalid');
-                break;
-            case 'error':
-                stateElement = document.getElementById('error');
-                if (error) {
-                    document.getElementById('errorMessage').textContent = 
-                        decodeURIComponent(error);
+        // Check if this is a Supabase verification redirect
+        if (token && type) {
+            console.log('Supabase verification detected:', { token, type });
+            
+            // You can show appropriate message based on type
+            let messageElement = document.getElementById('success');
+            let title = 'Email Verified';
+            let message = 'Your email has been verified successfully.';
+            
+            switch(type) {
+                case 'signup':
+                    title = 'Account Created';
+                    message = 'Your account has been created and verified successfully.';
+                    break;
+                case 'recovery':
+                    title = 'Password Reset';
+                    message = 'You can now reset your password.';
+                    break;
+                case 'invite':
+                    title = 'Invitation Accepted';
+                    message = 'You have accepted the invitation successfully.';
+                    break;
+                case 'magiclink':
+                    title = 'Magic Link';
+                    message = 'You have signed in with magic link.';
+                    break;
+                case 'email_change':
+                    title = 'Email Changed';
+                    message = 'Your email address has been changed successfully.';
+                    break;
+            }
+            
+            // Update the success message
+            const successDiv = document.getElementById('success');
+            successDiv.querySelector('.title').textContent = title;
+            successDiv.querySelector('.message').textContent = message;
+            
+            // Show success after a brief delay
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                successDiv.classList.remove('hidden');
+            }, 1500);
+            
+        } else {
+            // Handle our custom status parameters
+            const status = urlParams.get('status');
+            const error = urlParams.get('error');
+            
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                
+                let stateElement = null;
+                
+                switch(status) {
+                    case 'success':
+                        stateElement = document.getElementById('success');
+                        break;
+                    case 'already_verified':
+                        stateElement = document.getElementById('already_verified');
+                        break;
+                    case 'expired':
+                        stateElement = document.getElementById('expired');
+                        break;
+                    case 'invalid':
+                        stateElement = document.getElementById('invalid');
+                        break;
+                    case 'error':
+                        stateElement = document.getElementById('error');
+                        if (error) {
+                            document.getElementById('errorMessage').textContent = 
+                                decodeURIComponent(error);
+                        }
+                        break;
+                    default:
+                        stateElement = document.getElementById('error');
                 }
-                break;
-            default:
-                stateElement = document.getElementById('error');
-        }
-        
-        if (stateElement) {
-            stateElement.classList.remove('hidden');
+                
+                if (stateElement) {
+                    stateElement.classList.remove('hidden');
+                }
+            }, 1000);
         }
     </script>
 </body>
