@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Email confirmation">
+    <meta name="description" content="Email confirmation - Forbble">
     <meta name="robots" content="noindex, nofollow">
-    <title>Email Confirmation</title>
+    <title>Forbble</title>
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -42,7 +42,7 @@
         
         .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             background: var(--bg-secondary);
             border-radius: 12px;
             padding: 40px 32px;
@@ -65,21 +65,29 @@
         }
         
         .button {
-            display: inline-block;
+            display: block;
+            width: 100%;
             background: var(--button-bg);
             color: var(--button-text);
             text-decoration: none;
-            padding: 12px 28px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
             font-size: 15px;
             font-weight: 400;
             transition: opacity 0.2s;
             border: none;
             cursor: pointer;
+            margin-bottom: 16px;
         }
         
         .button:hover {
             opacity: 0.9;
+        }
+        
+        .button-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
         }
         
         .hidden {
@@ -101,11 +109,25 @@
     <div class="container">
         <div class="card">
             
-            <!-- Success -->
-            <div id="success" class="hidden">
+            <!-- Success - Signup -->
+            <div id="success_signup" class="hidden">
                 <h2 class="title">Email Verified</h2>
                 <p class="message">Your email has been verified successfully. You can now sign in to your account.</p>
                 <a href="https://forbble.com/login" class="button">Sign In</a>
+            </div>
+            
+            <!-- Success - Password Reset -->
+            <div id="success_password_reset" class="hidden">
+                <h2 class="title">Email Verified</h2>
+                <p class="message">Your email has been verified. You can now reset your password.</p>
+                <a href="https://forbble.com/reset-password" class="button">Reset Password</a>
+            </div>
+            
+            <!-- Success - Email Change -->
+            <div id="success_email_change" class="hidden">
+                <h2 class="title">Email Updated</h2>
+                <p class="message">Your email has been verified and updated successfully.</p>
+                <a href="https://forbble.com/login" class="button">Log in</a>
             </div>
             
             <!-- Already Verified -->
@@ -125,7 +147,7 @@
             <!-- Invalid -->
             <div id="invalid" class="hidden">
                 <h2 class="title">Invalid Link</h2>
-                <p class="message">This verification link is invalid.</p>
+                <p class="message">This verification link is invalid or has already been used.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
             </div>
             
@@ -149,44 +171,91 @@
         const params = new URLSearchParams(window.location.search);
         const status = params.get('status');
         const error = params.get('error');
+        const type = params.get('type');
+        const userId = params.get('user_id');
         
         document.getElementById('loading').classList.add('hidden');
         
         let stateElement = null;
+        let stateId = 'error';
         
         switch(status) {
             case 'success':
-                stateElement = document.getElementById('success');
-                break;
-            case 'already_verified':
-                stateElement = document.getElementById('already_verified');
-                break;
-            case 'expired':
-                stateElement = document.getElementById('expired');
-                break;
-            case 'invalid':
-                stateElement = document.getElementById('invalid');
-                break;
-            case 'error':
-                stateElement = document.getElementById('error');
-                if (error) {
-                    document.getElementById('errorMessage').textContent = 
-                        decodeURIComponent(error);
+                if (type === 'password_reset') {
+                    stateId = 'success_password_reset';
+                    // Store token and userId for password reset
+                    if (params.get('token')) {
+                        localStorage.setItem('password_reset_token', params.get('token'));
+                    }
+                    if (userId) {
+                        localStorage.setItem('password_reset_user_id', userId);
+                    }
+                } else if (type === 'email_change') {
+                    stateId = 'success_email_change';
+                } else {
+                    stateId = 'success_signup';
                 }
                 break;
+            case 'already_verified':
+                stateId = 'already_verified';
+                break;
+            case 'expired':
+                stateId = 'expired';
+                break;
+            case 'invalid':
+                stateId = 'invalid';
+                break;
+            case 'error':
+                stateId = 'error';
+                break;
             default:
-                stateElement = document.getElementById('error');
+                stateId = 'error';
         }
+        
+        stateElement = document.getElementById(stateId);
         
         if (stateElement) {
             stateElement.classList.remove('hidden');
+            
+            // Update error message if available
+            if (error && stateId === 'error') {
+                const errorMessage = document.getElementById('errorMessage');
+                if (errorMessage) {
+                    let decodedError = decodeURIComponent(error);
+                    
+                    // Friendly error messages
+                    const errorMap = {
+                        'rate_limit': 'Too many attempts. Please try again later.',
+                        'database_error': 'Temporary server issue. Please try again.',
+                        'server_config': 'Server configuration error.',
+                        'verification_failed': 'Verification failed. Please try again.',
+                        'token_not_found': 'Verification link not found.',
+                        'token_expired': 'Verification link expired.',
+                        'internal_error': 'Internal server error.'
+                    };
+                    
+                    if (errorMap[decodedError]) {
+                        decodedError = errorMap[decodedError];
+                    }
+                    
+                    errorMessage.textContent = decodedError;
+                }
+            }
+            
+            // Update password reset link with token
+            if (stateId === 'success_password_reset') {
+                const resetButton = stateElement.querySelector('.button');
+                if (resetButton && params.get('token') && userId) {
+                    resetButton.href = `https://forbble.com/reset-password?token=${params.get('token')}&user_id=${userId}`;
+                }
+            }
         }
         
-        // Auto-redirect on success after 3 seconds
-        if (status === 'success') {
+        // Auto-redirect for success after 5 seconds
+        if (stateId.startsWith('success_') && !stateId.includes('password_reset')) {
             setTimeout(() => {
                 window.location.href = 'https://forbble.com/login';
-            }, 3000);
+            }, 5000);
         }
     </script>
 </body>
