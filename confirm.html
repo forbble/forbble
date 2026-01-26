@@ -118,7 +118,7 @@
             <!-- Expired -->
             <div id="expired" class="hidden">
                 <h2 class="title">Link Expired</h2>
-                <p class="message">This verification link has expired.</p>
+                <p class="message">This verification link has expired. Please request a new verification email.</p>
                 <a href="https://forbble.com/login" class="button">Request New Link</a>
             </div>
             
@@ -148,18 +148,55 @@
     <script>
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const errorCode = urlParams.get('error_code');
+        const errorDescription = urlParams.get('error_description');
         const token = urlParams.get('token');
         const type = urlParams.get('type');
+        
+        console.log('URL Parameters:', {
+            error,
+            errorCode,
+            errorDescription,
+            token,
+            type
+        });
         
         // Show loading state initially
         document.getElementById('loading').classList.remove('hidden');
         
-        // Check if this is a Supabase verification redirect
-        if (token && type) {
-            console.log('Supabase verification detected:', { token, type });
+        // Check for Supabase errors first
+        if (error || errorCode || errorDescription) {
+            console.log('Supabase error detected:', { error, errorCode, errorDescription });
+            
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                
+                let stateElement = null;
+                
+                if (errorCode === 'otp_expired') {
+                    stateElement = document.getElementById('expired');
+                } else if (error === 'access_denied') {
+                    stateElement = document.getElementById('invalid');
+                } else {
+                    stateElement = document.getElementById('error');
+                    if (errorDescription) {
+                        document.getElementById('errorMessage').textContent = 
+                            decodeURIComponent(errorDescription).replace(/\+/g, ' ');
+                    }
+                }
+                
+                if (stateElement) {
+                    stateElement.classList.remove('hidden');
+                }
+            }, 1000);
+            
+        } 
+        // Check if this is a successful Supabase verification
+        else if (token && type) {
+            console.log('Supabase verification successful:', { token, type });
             
             // You can show appropriate message based on type
-            let messageElement = document.getElementById('success');
             let title = 'Email Verified';
             let message = 'Your email has been verified successfully.';
             
@@ -198,9 +235,9 @@
             }, 1500);
             
         } else {
-            // Handle our custom status parameters
+            // Handle our custom status parameters (for email change flow)
             const status = urlParams.get('status');
-            const error = urlParams.get('error');
+            const customError = urlParams.get('error');
             
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
@@ -222,13 +259,14 @@
                         break;
                     case 'error':
                         stateElement = document.getElementById('error');
-                        if (error) {
+                        if (customError) {
                             document.getElementById('errorMessage').textContent = 
-                                decodeURIComponent(error);
+                                decodeURIComponent(customError);
                         }
                         break;
                     default:
-                        stateElement = document.getElementById('error');
+                        // If no parameters, show success (maybe user refreshed page)
+                        stateElement = document.getElementById('success');
                 }
                 
                 if (stateElement) {
